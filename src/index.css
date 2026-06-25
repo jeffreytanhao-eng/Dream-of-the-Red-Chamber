@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  body {
+    font-family: "Noto Serif SC", serif;
+    background: #1A1A1A;
+    color: #1A1A1A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* 宣纸纹理背景 */
+  .rice-paper {
+    background-color: #F5F0E8;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.7 0 0 0 0 0.6 0 0 0 0 0.4 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* 卷轴对话框 */
+  .scroll-box {
+    background: linear-gradient(180deg, #F5F0E8 0%, #EDE5D3 50%, #F5F0E8 100%);
+    border: 2px solid #C5A55A;
+    border-radius: 8px;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.3),
+      inset 0 0 40px rgba(139,26,26,0.05);
+    position: relative;
+  }
+  .scroll-box::before,
+  .scroll-box::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    height: 20px;
+    background: linear-gradient(90deg, #8B1A1A 0%, #A52222 30%, #8B1A1A 70%, #6B1010 100%);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .scroll-box::before { top: -10px; }
+  .scroll-box::after { bottom: -10px; }
+
+  /* 印章式名称标签 */
+  .seal-tag {
+    background: #8B1A1A;
+    color: #F5F0E8;
+    font-family: "Ma Shan Zheng", cursive;
+    padding: 4px 12px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .seal-tag::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid rgba(245,240,232,0.3);
+    border-radius: 1px;
+  }
+
+  /* 古玉按钮 */
+  .jade-btn {
+    background: linear-gradient(135deg, #6B9B8A 0%, #5C8A7A 40%, #4A7A6A 100%);
+    color: #F5F0E8;
+    border: 1px solid #C5A55A;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-family: "ZCOOL XiaoWei", serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .jade-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    background: linear-gradient(135deg, #7BAB9A 0%, #6C9A8A 40%, #5A8A7A 100%);
+  }
+  .jade-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* 朱砂按钮（主要） */
+  .cinnabar-btn {
+    background: linear-gradient(135deg, #A52222 0%, #8B1A1A 50%, #6B1010 100%);
+    color: #F5F0E8;
+    border: 2px solid #C5A55A;
+    border-radius: 8px;
+    padding: 14px 40px;
+    font-family: "Ma Shan Zheng", cursive;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139,26,26,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    letter-spacing: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cinnabar-btn::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(245,240,232,0.2);
+    border-radius: 5px;
+    pointer-events: none;
+  }
+  .cinnabar-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(139,26,26,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+    background: linear-gradient(135deg, #B53232 0%, #9B2A2A 50%, #7B2020 100%);
+  }
+
+  /* 选项按钮 */
+  .choice-btn {
+    background: linear-gradient(135deg, rgba(245,240,232,0.95) 0%, rgba(232,223,208,0.95) 100%);
+    color: #1A1A1A;
+    border: 1.5px solid #B8A88A;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-family: "Noto Serif SC", serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .choice-btn:hover {
+    border-color: #8B1A1A;
+    background: linear-gradient(135deg, #FFF9EE 0%, #F5EDDE 100%);
+    transform: translateX(6px);
+    box-shadow: 0 4px 12px rgba(139,26,26,0.2);
+  }
+  .choice-btn:hover::before {
+    content: '❖';
+    position: absolute;
+    left: -20px;
+    color: #8B1A1A;
+    font-size: 0.8rem;
+  }
+
+  /* 属性面板 */
+  .panel-side {
+    background: linear-gradient(180deg, rgba(26,26,26,0.85) 0%, rgba(40,30,30,0.9) 100%);
+    border: 1px solid rgba(197,165,90,0.4);
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    color: #F5F0E8;
+  }
+
+  /* 金色描边文字 */
+  .gold-text {
+    color: #F5F0E8;
+    text-shadow:
+      0 0 10px rgba(197,165,90,0.5),
+      1px 1px 0 #8B6914,
+      -1px -1px 0 #8B6914,
+      1px -1px 0 #8B6914,
+      -1px 1px 0 #8B6914;
+  }
+
+  /* 古典花边框 */
+  .floral-frame {
+    border: 3px solid #C5A55A;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, #8B1A1A 0%, #6B1010 100%);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+
+  /* 进度条 - 墨韵 */
+  .ink-bar {
+    height: 8px;
+    background: rgba(245,240,232,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .ink-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s ease-out;
+    position: relative;
+  }
+
+  /* 遮罩层 */
+  .overlay-dark {
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+  }
+
+  /* 竖排文字 */
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.2em;
+  }
+}
+
+@layer utilities {
+  .text-shadow-ink {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #C5A55A;
+    border-radius: 3px;
+  }
+}
+
+/* 花瓣飘落粒子 */
+.petal {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(ellipse at 30% 30%, #FFB7C5 0%, #E8899E 50%, #D4627A 100%);
+  border-radius: 50% 0 50% 50%;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 打字机光标 */
+.typewriter-cursor::after {
+  content: '▎';
+  color: #8B1A1A;
+  animation: blink 0.8s step-end infinite;
+  margin-left: 2px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 场景切换水墨过渡 */
+.ink-transition {
+  position: fixed;
+  inset: 0;
+  background: #1A1A1A;
+  z-index: 100;
+  animation: inkWipe 1.2s ease-in-out forwards;
+}
+@keyframes inkWipe {
+  0% { clip-path: circle(0% at 50% 50%); opacity: 0; }
+  30% { opacity: 1; }
+  70% { clip-path: circle(150% at 50% 50%); opacity: 1; }
+  100% { clip-path: circle(150% at 50% 50%); opacity: 0; }
+}
+
+/* 属性变化提示动画 */
+.attr-popup {
+  animation: attrPop 1.5s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes attrPop {
+  0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+  20% { opacity: 1; transform: translateY(0) scale(1.1); }
+  80% { opacity: 1; transform: translateY(-20px) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.9); }
+}

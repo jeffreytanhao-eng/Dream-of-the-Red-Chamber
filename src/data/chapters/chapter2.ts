@@ -1,0 +1,195 @@
+import { Chapter } from '@/types';
+
+// 第二章：宝黛初定情（含读西厢、葬花伏笔）
+export const chapter2: Chapter = {
+  id: 2,
+  title: '第二回',
+  subtitle: '西厢共读',
+  intro: '自黛玉入府，宝玉日则同行同坐，夜则同息同止，言和意顺，略无参商。不日薛姨妈带着宝钗也进了京，住进梨香院。',
+  startDialogue: 'ch2_001',
+  dialogues: [
+    {
+      id: 'ch2_001',
+      speaker: 'narrator',
+      speakerName: '',
+      text: '却说宝钗来后，品格端方，容貌丰美，人多谓黛玉所不及。而且宝钗行为豁达，随分从时，不比黛玉孤高自许，目无下尘，故比黛玉大得下人之心。黛玉心中便有些悒郁不忿之意。',
+      background: 'rongguo_main',
+      next: 'ch2_002',
+    },
+    {
+      id: 'ch2_002',
+      speaker: 'zijuan',
+      speakerName: '紫鹃',
+      text: '姑娘，宝姑娘差人送了燕窝来，说听说姑娘咳嗽，特特送来的。',
+      portrait: 'zijuan',
+      choices: [
+        {
+          id: 'ch2_002_c1',
+          text: '（淡淡道）放着吧。难为她有心了。',
+          effects: [
+            { type: 'relationship', target: 'baochai', value: -2, operation: 'add' },
+            { type: 'attribute', target: 'cunning', value: 3, operation: 'add' },
+          ],
+          next: 'ch2_003',
+        },
+        {
+          id: 'ch2_002_c2',
+          text: '（微笑）宝姐姐真是个有心人。替我好生道谢。',
+          effects: [
+            { type: 'relationship', target: 'baochai', value: 5, operation: 'add' },
+            { type: 'attribute', target: 'virtue', value: 5, operation: 'add' },
+          ],
+          next: 'ch2_003',
+        },
+      ],
+    },
+    {
+      id: 'ch2_003',
+      speaker: 'narrator',
+      speakerName: '',
+      text: '那日正当三月中浣，早饭后，宝玉携了一套《会真记》（即《西厢记》），走到沁芳闸桥边桃花底下一块石上坐着，展开从头细玩。',
+      background: 'qinfang',
+      portrait: 'baoyu',
+      next: 'ch2_004',
+    },
+    {
+      id: 'ch2_004',
+      speaker: 'daiyu',
+      speakerName: '黛玉',
+      text: '（肩上担着花锄，锄上挂着花囊，手内拿着花帚，款款走来）什么书？你这样偷偷摸摸的。',
+      portrait: 'daiyu',
+      mood: 'thoughtful',
+      next: 'ch2_005',
+    },
+    {
+      id: 'ch2_005',
+      speaker: 'baoyu',
+      speakerName: '贾宝玉',
+      text: '（慌得藏之不迭）不过是《中庸》《大学》。',
+      portrait: 'baoyu',
+      mood: 'shy',
+      next: 'ch2_006',
+    },
+    {
+      id: 'ch2_006',
+      speaker: 'daiyu',
+      speakerName: '黛玉',
+      text: '（抿嘴笑道）你又在我跟前弄鬼。趁早儿给我瞧，好多着呢。',
+      portrait: 'daiyu',
+      choices: [
+        {
+          id: 'ch2_006_c1',
+          text: '（接过书来，从头看去，越看越爱，不到一顿饭工夫，将十六出俱已看完）',
+          effects: [
+            { type: 'attribute', target: 'talent', value: 10, operation: 'add' },
+            { type: 'relationship', target: 'baoyu', value: 15, operation: 'add' },
+            { type: 'flag', value: 'read_xixiang' },
+          ],
+          next: 'ch2_007',
+        },
+        {
+          id: 'ch2_006_c2',
+          text: '（翻了两页，皱眉道）这等淫词艳曲，你也看？仔细老爷知道了打你！',
+          effects: [
+            { type: 'attribute', target: 'virtue', value: 8, operation: 'add' },
+            { type: 'relationship', target: 'baoyu', value: -5, operation: 'add' },
+          ],
+          next: 'ch2_007',
+        },
+      ],
+    },
+    {
+      id: 'ch2_007',
+      speaker: 'baoyu',
+      speakerName: '贾宝玉',
+      text: '好妹妹，若论你，我是不怕的。你看了，好歹别告诉人去。真真这是好文章！你若看了，连饭也不想吃呢。妹妹，我就是个"多愁多病身"，你就是那"倾国倾城貌"。',
+      portrait: 'baoyu',
+      mood: 'shy',
+      next: 'ch2_008',
+    },
+    {
+      id: 'ch2_008',
+      speaker: 'daiyu',
+      speakerName: '黛玉',
+      text: '（听了这话，不觉带腮连耳通红，登时直竖起两道似蹙非蹙的眉，瞪了两只似睁非睁的眼）',
+      portrait: 'daiyu',
+      mood: 'angry',
+      choices: [
+        {
+          id: 'ch2_008_c1',
+          text: '（微微含笑，轻声道）你这该死的胡说！好好的把这淫词艳曲弄了来，还学了这些混话来欺负我。我告诉舅舅舅母去。',
+          effects: [
+            { type: 'relationship', target: 'baoyu', value: 10, operation: 'add' },
+            { type: 'flag', value: 'xixiang_confession' },
+          ],
+          next: 'ch2_009',
+        },
+        {
+          id: 'ch2_008_c2',
+          text: '（眼圈一红，转身要走）二哥哥你……你竟拿这些混账话来欺负我！',
+          effects: [
+            { type: 'relationship', target: 'baoyu', value: -3, operation: 'add' },
+            { type: 'attribute', target: 'health', value: -5, operation: 'add' },
+          ],
+          next: 'ch2_009',
+        },
+        {
+          id: 'ch2_008_c3',
+          text: '（低头不语，只觉心跳如擂鼓，半响方道）你再胡说，我可真恼了。',
+          effects: [
+            { type: 'relationship', target: 'baoyu', value: 8, operation: 'add' },
+            { type: 'attribute', target: 'beauty', value: 3, operation: 'add' },
+          ],
+          next: 'ch2_009',
+        },
+      ],
+    },
+    {
+      id: 'ch2_009',
+      speaker: 'baoyu',
+      speakerName: '贾宝玉',
+      text: '（慌了，忙上前拦住）好妹妹，千万饶我这一遭，原是我说错了。若有心欺负你，明儿我掉在池子里，教个癞头鼋吞了去，变个大忘八，等你明儿做了"一品夫人"病老归西的时候，我往你坟上替你驮一辈子的碑去。',
+      portrait: 'baoyu',
+      mood: 'normal',
+      next: 'ch2_010',
+    },
+    {
+      id: 'ch2_010',
+      speaker: 'daiyu',
+      speakerName: '黛玉',
+      text: '（嗤的一声笑了）一般唬的这个调儿，还只管胡说。"呸，原来是个苗而不秀，是个银样镴枪头。"',
+      portrait: 'daiyu',
+      mood: 'happy',
+      effects: [
+        { type: 'relationship', target: 'baoyu', value: 5, operation: 'add' },
+      ],
+      next: 'ch2_011',
+    },
+    {
+      id: 'ch2_011',
+      speaker: 'narrator',
+      speakerName: '',
+      text: '二人正说话，只见袭人走来叫宝玉去那边大老爷处请安。宝玉只得收了书，忙忙地去了。这里黛玉一个人走着，耳内忽听戏子们演习戏文，唱道："原来姹紫嫣红开遍，似这般都付与断井颓垣。"黛玉听了，倒也十分感慨缠绵。',
+      background: 'qinfang',
+      next: 'ch2_012',
+    },
+    {
+      id: 'ch2_012',
+      speaker: 'narrator',
+      speakerName: '',
+      text: '正是落花流水春去也，天上人间。黛玉蹲在水边，看着那桃花瓣儿落得满身满书满地皆是，轻轻兜了花瓣抖在池内。那花瓣浮在水面，飘飘荡荡，竟流出沁芳闸去了。',
+      effects: [
+        { type: 'flag', value: 'chapter2_complete' },
+        { type: 'attribute', target: 'talent', value: 5, operation: 'add' },
+      ],
+      chapterEnd: true,
+      next: 'ch2_end',
+    },
+    {
+      id: 'ch2_end',
+      speaker: 'narrator',
+      speakerName: '',
+      text: '【第二回·西厢共读 完】\n\n落红成阵，情思暗生。宝黛二人虽未明言，却已心意相通。然而金玉之说日盛一日，那薛宝钗项上金锁，恰与宝玉通灵玉上的字儿配成一对儿，黛玉心中如何不介意？',
+    },
+  ],
+};
