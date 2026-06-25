@@ -14,7 +14,6 @@ interface DialogueBoxProps {
 }
 
 export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerChange }: DialogueBoxProps) {
-  // 必须通过selector订阅store状态，否则组件不会响应式重渲染
   const currentChapterId = useGameStore(s => s.currentChapter);
   const currentDialogueId = useGameStore(s => s.currentDialogueId);
   const textSpeed = useGameStore(s => s.textSpeed);
@@ -26,8 +25,8 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
   const relationships = useGameStore(s => s.relationships);
   const flags = useGameStore(s => s.flags);
   const isTransitioning = useGameStore(s => s.isTransitioning);
+  const showingChapterEnd = useGameStore(s => s.showingChapterEnd);
 
-  // 使用useMemo根据订阅的ID获取当前对话，确保响应式更新
   const dialogue = useMemo(
     () => getDialogue(currentChapterId, currentDialogueId),
     [currentChapterId, currentDialogueId]
@@ -36,7 +35,6 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
   const { displayed, isComplete, skip } = useTypewriter(dialogue?.text || '', textSpeed);
   const clickBlocked = useRef(false);
 
-  // 判定选项条件是否满足
   const checkCondition = useCallback((cond?: { type: string; target?: string; operator: string; value: number | string }) => {
     if (!cond) return true;
     const target = cond.target || '';
@@ -68,7 +66,6 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
     if (!dialogue) return;
     onSpeakerChange?.(dialogue.speaker);
 
-    // 触发立绘变化
     const charId = dialogue.portrait || (dialogue.speaker !== 'narrator' ? dialogue.speaker : null);
     if (charId) {
       const char = characters[charId];
@@ -81,31 +78,29 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
       onPortraitChange?.(null);
     }
 
-    // 背景变化
     if (dialogue.background && scenes[dialogue.background]) {
       onBackgroundChange?.(getCachedImage(`bg_${dialogue.background}`, scenes[dialogue.background].prompt, 'landscape_16_9'));
     }
   }, [dialogue?.id, onPortraitChange, onBackgroundChange, onSpeakerChange]);
 
-  // 计算可用选项
-  const availableChoices = dialogue?.choices
-    ? dialogue.choices.filter(c => checkCondition(c.condition))
-    : [];
+  const availableChoices = useMemo(
+    () => dialogue?.choices ? dialogue.choices.filter(c => checkCondition(c.condition)) : [],
+    [dialogue, checkCondition]
+  );
   const hasChoices = availableChoices.length > 0;
 
   useEffect(() => {
-    if (isComplete && hasChoices && !showChoices) {
+    if (isComplete && hasChoices && !showChoices && !isTransitioning) {
       const t = setTimeout(() => setShowChoices(true), 300);
       return () => clearTimeout(t);
     }
-    // 如果有choices字段但所有选项都被过滤掉了，自动前进
-    if (isComplete && dialogue?.choices && dialogue.choices.length > 0 && availableChoices.length === 0 && !showChoices) {
-      const t = setTimeout(() => advanceDialogue(), 500);
+    // All choices filtered out - auto advance
+    if (isComplete && dialogue?.choices && dialogue.choices.length > 0 && availableChoices.length === 0 && !showChoices && !isTransitioning) {
+      const t = setTimeout(() => advanceDialogue(), 600);
       return () => clearTimeout(t);
     }
-  }, [isComplete, hasChoices, showChoices, setShowChoices, dialogue?.id, availableChoices.length, advanceDialogue]);
+  }, [isComplete, hasChoices, showChoices, dialogue?.id, availableChoices.length, advanceDialogue, setShowChoices, isTransitioning]);
 
-  // 重置showChoices当对话切换
   useEffect(() => {
     setShowChoices(false);
     clickBlocked.current = false;
@@ -131,7 +126,6 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
       skip();
       return;
     }
-    // 如果有选项显示中，不前进
     if (showChoices && hasChoices) {
       return;
     }
@@ -140,9 +134,11 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
     advanceDialogue();
   };
 
+  // Chapter end indicator
+  const nextHint = showingChapterEnd ? '点击翻入下章 ▶' : '点击继续 ▼';
+
   return (
     <div className="w-full max-w-5xl mx-auto px-4">
-      {/* 选项区 */}
       {showChoices && hasChoices && (
         <div className="flex flex-col gap-2 mb-4">
           {availableChoices.map((choice, idx) => (
@@ -165,7 +161,6 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
         </div>
       )}
 
-      {/* 对话框 */}
       <div className="scroll-box p-6 pt-8 cursor-pointer select-none relative z-10" onClick={handleClick}>
         {!isNarrator && char && (
           <div className="absolute -top-4 left-6 seal-tag text-lg" style={{ background: char.color }}>
@@ -184,9 +179,9 @@ export function DialogueBox({ onPortraitChange, onBackgroundChange, onSpeakerCha
           {!isComplete && <span className="typewriter-cursor" />}
         </div>
 
-        {isComplete && !showChoices && (
+        {isComplete && !showChoices && !isTransitioning && (
           <div className="text-right mt-2 text-ink/40 text-xs font-kai animate-pulse">
-            点击继续 ▼
+            {nextHint}
           </div>
         )}
       </div>

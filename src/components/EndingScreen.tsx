@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { endings } from '@/data/endings';
 import { useGameStore } from '@/store/gameStore';
@@ -14,6 +14,7 @@ export function EndingScreen() {
   const [showDesc, setShowDesc] = useState(false);
   const [showBtn, setShowBtn] = useState(false);
   const [bgLoaded, setBgLoaded] = useState(false);
+  const bgImgRef = useRef<HTMLImageElement>(null);
 
   const ending = endings.find(e => e.id === id) || endings[0];
   const cgUrl = getCachedImage(`ending_${ending.id}`, ending.cgPrompt, 'landscape_16_9');
@@ -22,6 +23,10 @@ export function EndingScreen() {
 
   useEffect(() => {
     stopBGM();
+    // Check cached image
+    if (bgImgRef.current && bgImgRef.current.complete && bgImgRef.current.naturalWidth > 0) {
+      setBgLoaded(true);
+    }
     const t1 = setTimeout(() => setShowPoem(true), 1500);
     const t2 = setTimeout(() => setShowDesc(true), 3500);
     const t3 = setTimeout(() => setShowBtn(true), 5000);
@@ -38,10 +43,10 @@ export function EndingScreen() {
     <div className="relative w-full h-full overflow-hidden bg-ink">
       {/* 结局CG */}
       <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-2000 ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
-        style={{ backgroundImage: `url(${cgUrl})`, animationDuration: '2s' }}
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
+        style={{ backgroundImage: bgLoaded ? `url(${cgUrl})` : undefined }}
       />
-      <img src={cgUrl} alt="" className="hidden" onLoad={() => setBgLoaded(true)} />
+      <img ref={bgImgRef} src={cgUrl} alt="" className="hidden" onLoad={() => setBgLoaded(true)} />
 
       {/* 遮罩 */}
       <div className={`absolute inset-0 ${isTragic ? 'bg-gradient-to-t from-black/80 via-black/40 to-black/30' : 'bg-gradient-to-t from-black/70 via-black/30 to-black/20'}`} />
